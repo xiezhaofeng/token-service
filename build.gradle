@@ -1,0 +1,157 @@
+def nexusurl = System.getProperty("nexusurl") ?: "${nexusurldefault}"
+
+def devrepourl="${nexusurl}/repository/maven-snapshots/"
+def relrepourl="${nexusurl}/repository/maven-releases/"
+def pubrepourl= "${nexusurl}/repository/maven-public/"
+
+println "nexus url : ${nexusurl}"
+
+buildscript {
+	ext {
+		springBootVersion = '1.5.3.RELEASE'
+		nexusurl = System.getProperty("nexusurl") ?: "http://192.168.81.66:8081"
+		 pubrepourl= "${nexusurl}/repository/maven-public/"
+	}
+	repositories {
+		mavenLocal()
+//		maven { url "${pubrepourl}" }
+		maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse-wtp'
+apply plugin: 'org.springframework.boot'
+//apply plugin: 'war'
+apply plugin:  'maven'
+apply plugin: 'idea'
+
+springBoot {
+    mainClass = "com.xunxintech.ruyue.coach.RyCoachTicketServiceApplication"
+}
+
+group = "com.xunxintech.ruyue.coach"
+def artifactId = "token-service"
+version = "1.0.0-SNAPSHOT"
+
+def paramRelease =  project.properties.get("release")
+if("${paramRelease}" != "null"){
+    version = version.replace("-SNAPSHOT","")
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+def repourl=devrepourl
+
+ if (!version.contains("SNAPSHOT")){
+ repourl=relrepourl
+ }
+
+
+repositories {
+	mavenLocal()
+//  	maven { url pubrepourl }
+  	maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+	mavenCentral()
+}
+
+configurations {
+	providedRuntime
+}
+
+dependencies {
+	compile('org.springframework.boot:spring-boot-starter-security')
+
+    compile('org.springframework.boot:spring-boot-starter-web')
+
+    //LOMBOK
+    compile group: 'org.projectlombok', name: 'lombok', version: '1.16.16'
+
+    //jackson
+    compile 'com.fasterxml.jackson.core:jackson-core:2.8.4'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.8.4'
+    compile 'com.fasterxml.jackson.datatype:jackson-datatype-joda:2.8.4'
+    compile 'com.fasterxml.jackson.module:jackson-module-parameter-names:2.8.4'
+    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.8.4'
+
+    //apache common
+    compile 'commons-lang:commons-lang:2.6'
+    //httpclient
+    compile('commons-httpclient:commons-httpclient:3.1')
+    compile('org.apache.httpcomponents:fluent-hc:4.5.3')
+    compile('org.apache.httpcomponents:httpclient:4.5.3')
+    compile('org.apache.httpcomponents:httpclient-cache:4.5.3')
+    compile('org.apache.httpcomponents:httpcore:4.4.6')
+    compile('org.apache.httpcomponents:httpmime:4.5.3')
+
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+    
+    //Spring Security
+	compile('org.springframework.boot:spring-boot-starter-security')
+	 
+	//Spring Security OAuth2
+	compile('org.springframework.security.oauth:spring-security-oauth2')
+	
+	compile group: 'javax.persistence', name: 'persistence-api', version: '1.0.2'
+	
+	//Spring Security Test
+	testCompile('org.springframework.security:spring-security-test')
+	
+	{
+    	exclude module: 'spring-boot-devtools'
+    	exclude module: 'h2'
+    }
+}
+
+
+jar {
+	baseName = "$artifactId"
+	version = "$project.version"
+	exclude('config')
+}
+
+task showTestTaskClasspath << {
+  test.classpath.each { println it }
+}
+
+install {
+    repositories.mavenInstaller {
+        pom.version = "$project.version"
+        pom.artifactId = "$artifactId"
+        pom.groupId = "$project.group"
+    }
+}
+
+//gradle profiles param
+def pro =  project.properties.get("springProfiles")
+
+if("${pro}" != "null"){
+    test.systemProperty 'spring.profiles.active', "${pro}"
+	println "spring.profiles.active=${pro}"
+}
+
+//上传到nexus
+uploadArchives {
+    repositories.mavenInstaller {
+         pom.version = "$project.version"
+         pom.artifactId = "$artifactId"
+         pom.groupId = "$project.group"
+     }
+    repositories {
+        mavenDeployer {
+            repository(url: repourl)
+            {
+                authentication(userName: "$nexususer", password: "$nexuspwd")
+            }
+            pom.version = "$project.version"
+            pom.artifactId = "$artifactId"
+            pom.groupId = "$project.group"
+        }
+    }
+}
+

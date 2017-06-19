@@ -1,0 +1,54 @@
+spring:
+  profiles:
+    active: dev
+  http:
+    converters.preferred-json-mapper: jackson
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+    timeout:
+      connect: 60000
+      read: 60000
+      write: 60000
+    content-type: text/html
+    headers:
+      #Connection: close
+      Content-Type: text/html
+      Connection: Upgrade,persistent
+      Upgrade: h2c,HTTP/2.0
+    station:
+      sync: false
+  jpa:
+    show-sql: true
+    database: mysql
+  messages:
+    encoding: UTF-8
+  freemarker:
+    charset: utf-8
+    content-type: text/html
+  aop:
+    proxy-target-class: true
+  devtools:
+    restart:
+      enabled: false
+  cache:
+    cacheexpires: # in seconds
+      tokenStoreKey: 600
+    type: redis
+  redis:
+    pool:
+      max-idle: 100 # pool settings ...
+      min-idle: 0
+      max-active: 100
+      max-wait: -1
+server:
+  tomcat:
+    uri-encoding: utf-8
+    max-threads: 800
+  compression:
+    enabled: true
+  image:
+    url: http://rycoachtest.xunxintech.com/attachment/thumbnail/
+logging:
+  config: classpath:logback-spring.xml

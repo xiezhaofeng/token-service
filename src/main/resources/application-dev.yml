@@ -1,0 +1,34 @@
+spring:
+# JMX   Expose MBeans from Spring
+  jmx:
+    enabled: true
+server:
+    port: 8088
+management:
+  security:
+    enabled: false
+security:
+  basic:
+    enabled: false
+  oauth2:
+    client:
+      client-id: test
+      client-secret: test123
+      access-token-uri: http://localhost:8080/oauth/token
+      user-authorization-uri: http://localhost:8080/oauth/authorize
+    resource:
+      client-id: test
+      client-secret: test123
+      userInfoUri: http://rycoachtest.xunxintech.com/user
+      userAuthorizationUri: http://rycoachtest.xunxintech.com/oauth/authorize
+#      tokenInfoUri: http://rycoachtest.xunxintech.com/oauth/authorize
+      tokenInfoUri: http://rycoachtest.xunxintech.com/oauth/check_token
+#auth:
+# server:
+#  url: http://localhost:8080/oauth/check_token/
+#  clientId: test
+#  clientSecret: test123
+
+      
+      
+        
