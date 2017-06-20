@@ -50,7 +50,7 @@ public class RyCoachTicketServiceApplication {
 	}
 	
 
-	@RequestMapping({"route/{methodProfix}/{method}/{version}"})
+	@RequestMapping({"route/{method}"})
 	public String route(HttpServletRequest request, HttpServletResponse response, @PathVariable String method, @PathVariable String version, @RequestBody String param,@PathVariable String methodProfix) throws Exception{
 		return "";
 	}
