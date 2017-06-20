@@ -49,9 +49,14 @@ public class RyCoachTicketServiceApplication {
 		SpringApplication.run(RyCoachTicketServiceApplication.class, args);
 	}
 	
-
+	/**
+	 *testInfo
+	 *token：`6e9cbd2a-82cc-428a-8b49-106b2ff50c27`
+	 *URL：`localhost:8088/route/method?token=6e9cbd2a-82cc-428a-8b49-106b2ff50c27
+	 *
+	 **/
 	@RequestMapping({"route/{method}"})
-	public String route(HttpServletRequest request, HttpServletResponse response, @PathVariable String method, @PathVariable String version, @RequestBody String param,@PathVariable String methodProfix) throws Exception{
+	public String route(HttpServletRequest request, HttpServletResponse response, @PathVariable String method) throws Exception{
 		return "";
 	}
 
