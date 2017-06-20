@@ -58,14 +58,20 @@ public class TokenStoreServiceImpl implements TokenStoreService
 			String asString = Request.Get(tokenInfoUri + "?token=" + token).execute().returnContent().asString();
 
 			//TODO BUG
+			logger.error("######################################################################################");
+			logger.error("######################################################################################");
 			logger.error(asString);
 
 			Map map = restTemplate.exchange(tokenInfoUri, HttpMethod.POST, new HttpEntity<MultiValueMap<String, String>>(formData, headers),
 					new HashMap<String, Object>().getClass()).getBody();
 			logger.error(JSON.objectMapper.writeValueAsString(map));
+			logger.error("######################################################################################");
+			logger.error("######################################################################################");
+			logger.error("######################################################################################");
 			
 			
-			return JSON.objectMapper.readValue(asString, JSON.objectMapper.getTypeFactory().constructMapLikeType(HashMap.class, String.class, Object.class));
+//			return JSON.objectMapper.readValue(asString, JSON.objectMapper.getTypeFactory().constructMapLikeType(HashMap.class, String.class, Object.class));
+			return map;
 		}
 		catch (HttpMessageNotReadableException e)
 		{
