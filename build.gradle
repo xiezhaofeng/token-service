@@ -73,11 +73,11 @@ dependencies {
     compile group: 'org.projectlombok', name: 'lombok', version: '1.16.16'
 
     //jackson
-    compile 'com.fasterxml.jackson.core:jackson-core:2.8.4'
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.8.4'
-    compile 'com.fasterxml.jackson.datatype:jackson-datatype-joda:2.8.4'
-    compile 'com.fasterxml.jackson.module:jackson-module-parameter-names:2.8.4'
-    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.8.4'
+    compile 'com.fasterxml.jackson.core:jackson-core:2.9.7'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.9.7'
+    compile 'com.fasterxml.jackson.datatype:jackson-datatype-joda:2.9.7'
+    compile 'com.fasterxml.jackson.module:jackson-module-parameter-names:2.9.7'
+    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.9.7'
 
     //apache common
     compile 'commons-lang:commons-lang:2.6'
